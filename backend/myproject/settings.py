@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
-    'base',
+    'shoes',
 ]
 
 MIDDLEWARE = [
@@ -72,14 +72,24 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'myproject.wsgi.application'
 
-
-# Database
+# The default database configuration: 
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'shoetrackerdb',
+        'USER': 'emily',
+        'PASSWORD': 'spectra',
+        'HOST': 'localhost',   # Or the address of your DB server
+        'PORT': '5432',        # Default PostgreSQL port
     }
 }
 
