@@ -13,9 +13,12 @@ User = get_user_model()
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def get_shoes(request):
-    items = Shoe.objects.all()
+    items = Shoe.objects.order_by('?')[:5]
     serializer = ShoeSerializer(items, many=True)
     return Response(serializer.data)
+
+
+
 
 @api_view(['POST'])
 def add_shoe(request):
@@ -26,11 +29,15 @@ def add_shoe(request):
     else:
         return Response(serializer.errors, status=400)
     
+
+
 @api_view(['GET'])
 def get_users(request):
     users = User.objects.all()
     serializer = UserSerializer(users, many=True)
     return Response(serializer.data)
+
+
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
@@ -46,6 +53,8 @@ def register_user(request):
         }, status=status.HTTP_201_CREATED)
     else:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
@@ -67,6 +76,7 @@ def login_user(request):
         }, status=status.HTTP_401_UNAUTHORIZED)
     
 
+
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def logout_user(request):
@@ -80,9 +90,46 @@ def logout_user(request):
             'error': 'Token not found'
         }, status=status.HTTP_400_BAD_REQUEST)
     
+
+
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def get_user(request):
     user = request.user
-    serializer = UserSerializer(user)
+    if user and user.is_authenticated:
+        user = request.user
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
+    else:
+        return Response({"username": None, "user_id": None})
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_user_shoes(request):
+    user = request.user
+    user_shoes = user.shoes.all()
+
+    return
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def add_user_shoe(request):
+    return
+
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def search(request):
+    search_term = request.data.get('search', '')
+    if not search_term:
+        return Response({'error': 'Search term is required'}, status=status.HTTP_400_BAD_REQUEST)
+    shoes = Shoe.objects.filter(
+        name__icontains=search_term
+    ) | Shoe.objects.filter(
+        brand__icontains=search_term
+    )
+
+    serializer = ShoeSerializer(shoes, many=True)
     return Response(serializer.data)

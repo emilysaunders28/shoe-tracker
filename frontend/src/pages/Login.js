@@ -2,19 +2,22 @@ import { Formik } from 'formik';
 import * as yup from 'yup';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import { useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query'
 
 const Login = (props) =>  {
-    const setUser = props.setUser;
+    const queryClient = useQueryClient();
+    const [loginError, setLoginError] = useState('')
+    const [registerError, setRegisterError] = useState('')
 
     const [visible, setVisible] = useState(false);
-    const [loginError, setLoginError] = useState(null);
-
     const loginSchema = yup.object().shape({
         username: yup.string().required('Username is required'),
         password: yup.string().required('Password is required')
     })
 
     const handleLogin = (values, { setSubmitting }) => {
+        setLoginError('');
+        setRegisterError('');
         fetch('/api/login/', {
             credentials: 'include',
             method: 'POST',
@@ -22,41 +25,39 @@ const Login = (props) =>  {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(values)
-        }).then((response) => {
+        }).then(async (response) => {
+            const data = await response.json();
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+                throw new Error(data.error || 'Login failed');
             }
-            return response.json();
-        }).then((data) => {
-            console.log(data);
-            if (data.errors){
-                setLoginError(data.errors);
-                setSubmitting(false);
+            return data;
+        }).then(async (data) => {
+            if (data.error){
+                setLoginError(data.error);
             } else {
-                setLoginError(null);
-                setSubmitting(false);
                 localStorage.setItem('token', data.token);
-                setUser({
-                    username: data.username,
-                    id: data.id
-                });
+                await queryClient.invalidateQueries(['user']);
             }
         }
         ).catch((error) => {
             console.error('Error logging in:', error);
-            setSubmitting(false);
-        });
+            setLoginError(error.message)
+        }).finally(() => {
+            setSubmitting(false)
+        })
     }
 
     const [newVisible, setNewVisible] = useState(false);
-    const [registerError, setRegisterError] = useState(null);
+
 
     const registerSchema = yup.object().shape({
         newUsername: yup.string().required('Username is required'),
-        newPassword: yup.string().required('Password is required').min(8, 'Password must be at least 8 characters'),
+        newPassword: yup.string().required('Password is required').min(4, 'Password must be at least 4 characters'),
         confirmPassword: yup.string().oneOf([yup.ref('newPassword'), null], 'Passwords must match')
     })
     const handleRegister = (values, { setSubmitting }) => {
+        setLoginError('');
+        setRegisterError('');
         fetch('/api/register/', {
             credentials: 'include',
             method: 'POST',
@@ -67,30 +68,29 @@ const Login = (props) =>  {
                 username: values.newUsername,
                 password: values.newPassword
             })
-        }).then((response) => {
+        }).then(async (response) => {
+            const data = await response.json();
             if (!response.ok) {
-                throw new Error('Network response was not ok')
+                // Error returned by server
+                throw new Error(data.error || 'Login failed');
             }
-            return response.json();
+            return data;
         }).then((data) => {
             console.log(data);
-            if (data.errors) {
-                setRegisterError(data.errors)
-                setSubmitting(false)
+            if (data.error) {
+                setRegisterError(data.error)
             } else {
-                setRegisterError(null);
-                setSubmitting(false);
                 localStorage.setItem('token', data.token);
-                setUser({
-                    username: data.username,
-                    id: data.id
-                });
+                queryClient.invalidateQueries(['user'])
             }
         }).catch((error) => {
             console.error('Error registering user:', error);
-            setSubmitting(false)
+            setRegisterError(error.message)
+        }).finally(() => {
+            setSubmitting(false);
         })
     }
+
 
     return ( 
         <Container>
@@ -159,7 +159,7 @@ const Login = (props) =>  {
                 </Col>
                 <Col>
                     <h1>Create new user</h1>
-                    {registerError && <div className="alert alert-danger">Invalid username or password</div>}
+                    {registerError && <div className="alert alert-danger">{registerError}</div>}
                     <Formik
                         initialValues={{
                             newUsername: '',
