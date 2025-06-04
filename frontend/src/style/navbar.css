@@ -1,0 +1,31 @@
+/* NAVBAR */
+.my-navbar {
+    background-color: var(--color-primary);
+    color: white;
+}
+.my-navbar a {
+    color: white;
+    padding-right: 1rem;
+}
+a:hover {
+    color: var(--color-secondary);
+}
+.my-navbar a:hover {
+    color: var(--color-secondary);
+}
+.my-navbar a:focus {
+    color: white;
+}
+.my-navbar .dropdown-item {
+    color: black;
+}
+.my-navbar .my-button {
+    border: 0px;
+}
+.my-navbar .my-button:disabled {
+    opacity: 1;
+    border: 0px
+}
+.my-navbar .my-button:hover {
+    border: 0px;
+}

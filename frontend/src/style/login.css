@@ -1,0 +1,32 @@
+#login-header {
+    background-image: url('https://cdn.fleetfeet.com/a:2.7543859649123-f:cover-w:900/assets/Altra-Experience-Flow-2-footer.jpg?s=49cc6661');
+    aspect-ratio: 899/327;
+    background-size: cover;
+    background-position: center;
+    border-radius: 10px;
+}
+#login-header h1 {
+    text-align: right;
+    color: white;
+    font-size: 3.5rem;
+    padding: 20px;
+    padding-right:40px;
+  }
+
+#login-container h2 {
+    color: var(--color-primary);
+}
+
+#login-container .login-form {
+    max-width: 400px;
+    min-height: 450px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: var(--color-background);
+    border-radius: var(--border-radius-medium);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#login-container .login-form .form-group {
+    margin-bottom: 15px;
+}

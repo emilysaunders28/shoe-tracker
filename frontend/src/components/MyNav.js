@@ -18,58 +18,65 @@ const MyNav = (props) => {
         navigate(`/search/${search}`)
     }
 
-    const handleLogout = useLogout()
+    const { mutate: logout, isLoading: isLoggingOut } = useLogout()
 
 
     return (
-        <Navbar>
+        <Navbar className='my-navbar' expand="lg">
             <Container fluid>
-                <Navbar.Brand as={Link} to="/">
-                    Shoe Tracker
-                </Navbar.Brand>
-                {isLoading ? (
-                    <Navbar.Text>Loading user...</Navbar.Text>
-                ) : user.username ? (
-                    <NavDropdown title={`Logged in as ${user.username}`} id="basic-nav-dropdown">
-                        <NavDropdown.Item as={Link} to="/myshoes">
-                            My Shoes
-                        </NavDropdown.Item>
-                        <NavDropdown.Item onClick={() => handleLogout()}>
-                            Logout
-                        </NavDropdown.Item>
-                    </NavDropdown>
-                ) : (
+                {/* Left side: Brand, links, dropdown */}
+                <div className="d-flex align-items-center gap-3">
+                    <Navbar.Brand as={Link} to="/">
+                        Shoe Tracker
+                    </Navbar.Brand>
+
+                    {isLoading ? (
+                        <Navbar.Text>Loading user...</Navbar.Text>
+                    ) : user?.username ? (
+                        <NavDropdown
+                            title={isLoggingOut ? 'Logging out...' : `Logged in as ${user.username}`}
+                            id="basic-nav-dropdown"
+                        >
+                            <NavDropdown.Item as={Link} to="/myshoes">
+                                My Shoes
+                            </NavDropdown.Item>
+                            <NavDropdown.Item onClick={() => logout()}>
+                                Logout
+                            </NavDropdown.Item>
+                        </NavDropdown>
+                    ) : (
+                        <Nav>
+                            <Nav.Link as={Link} to="/login">
+                                Login
+                            </Nav.Link>
+                        </Nav>
+                    )}
+
                     <Nav>
-                        <Nav.Link as={Link} to="/login">
-                            Login
-                        </Nav.Link>
+                        <Nav.Link as={Link} to="/explore">Explore</Nav.Link>
                     </Nav>
-                )}
-                <Nav>
-                    <Nav.Link as={Link} to="/explore">
-                        Explore
-                    </Nav.Link>
-                </Nav>
-                <Form className='d-flex'>
-                    <Row>
-                        <Col>
-                            <Form.Control
-                                type='text'
-                                placeholder='Search'
-                                className='mr-sm-2'
-                                value={search}
-                                onChange={(e) => setSearch(e.target.value)}
-                            />
-                        </Col>
-                        <Col>
-                            <Button type='submit' onClick={handleSearch} disabled={!search}>
-                                Search
-                            </Button>
-                        </Col>
-                    </Row>
+                </div>
+
+                {/* Right side: Search bar */}
+                <Form className="d-flex ms-auto align-items-center" onSubmit={handleSearch}>
+                    <Form.Control
+                        type="text"
+                        placeholder="Search"
+                        className="me-2 form-control-sm"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                    />
+                    <Button
+                        className="my-button btn-sm"
+                        type="submit"
+                        disabled={!search}
+                    >
+                        Search
+                    </Button>
                 </Form>
             </Container>
         </Navbar>
+
     )
 }
 

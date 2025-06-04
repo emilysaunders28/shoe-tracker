@@ -20,7 +20,7 @@ class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, min_length=4)
     class Meta:
         model = User
-        fields = ['id', 'username', 'password']
+        fields = ['id', 'username', 'password', 'shoes']
         read_only_fields = ['id']
 
     def create(self, validated_data):
@@ -28,6 +28,7 @@ class UserSerializer(serializers.ModelSerializer):
     
 
 class UserShoeSerializer(serializers.ModelSerializer):
+    shoe = ShoeSerializer(read_only=True)
     class Meta:
         model = UserShoe
         fields = '__all__'

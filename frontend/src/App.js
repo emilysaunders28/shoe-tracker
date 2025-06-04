@@ -4,6 +4,7 @@ import ShoeView from './pages/ShoeView';
 import MyShoes from './pages/MyShoes';
 import Search from './pages/Search';
 import Explore from './pages/Explore';
+import Add from './pages/Add'
 import { useEffect } from 'react';
 import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { useUser } from './hooks/useUser'
@@ -25,6 +26,7 @@ function App() {
               user && user.username ? <Navigate to="/" /> : <Login />
             } />
             <Route path="/view/:id" element = {<ShoeView/>} />
+            <Route path="/add/:id" element={<Add/>} />
             <Route exact path="/myshoes" element={
               user && user.username ? <MyShoes/> : <Navigate to="/" />
             }/>

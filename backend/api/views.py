@@ -3,34 +3,22 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework import status
 from rest_framework.authtoken.models import Token
-from .serializers import ShoeSerializer, UserSerializer
-from shoes.models import Shoe
+from .serializers import ShoeSerializer, UserSerializer, UserShoeSerializer
+from shoes.models import Shoe, UserShoe
 from django.contrib.auth import get_user_model, authenticate
 
 User = get_user_model()
 
-
+# Get 5 random shoes
 @api_view(['GET'])
 @permission_classes([AllowAny])
-def get_shoes(request):
+def get_random(request):
     items = Shoe.objects.order_by('?')[:5]
     serializer = ShoeSerializer(items, many=True)
     return Response(serializer.data)
-
-
-
-
-@api_view(['POST'])
-def add_shoe(request):
-    serializer = ShoeSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data)
-    else:
-        return Response(serializer.errors, status=400)
     
 
-
+# Get all users
 @api_view(['GET'])
 def get_users(request):
     users = User.objects.all()
@@ -38,7 +26,7 @@ def get_users(request):
     return Response(serializer.data)
 
 
-
+# Create a user
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def register_user(request):
@@ -55,7 +43,7 @@ def register_user(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-
+# Login a user
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def login_user(request):
@@ -76,7 +64,7 @@ def login_user(request):
         }, status=status.HTTP_401_UNAUTHORIZED)
     
 
-
+# Logout a user
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def logout_user(request):
@@ -91,7 +79,7 @@ def logout_user(request):
         }, status=status.HTTP_400_BAD_REQUEST)
     
 
-
+# Get user info
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def get_user(request):
@@ -102,23 +90,65 @@ def get_user(request):
         return Response(serializer.data)
     else:
         return Response({"username": None, "user_id": None})
+    
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_shoe_by_id(request, id):
+    try:
+        shoe = Shoe.objects.get(id=id)
+        serializer = ShoeSerializer(shoe)
+        return Response(serializer.data)
+    except Shoe.DoesNotExist:
+        return Response({'error': 'Shoe not found'}, status=status.HTTP_404_NOT_FOUND)
 
 
+# Get user shoes
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_user_shoes(request):
     user = request.user
-    user_shoes = user.shoes.all()
+    user_shoes = UserShoe.objects.filter(user=user).select_related('shoe')
+    serializer = UserShoeSerializer(user_shoes, many=True)
+    return Response(serializer.data)
 
-    return
 
-
+# Add a user shoe
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def add_user_shoe(request):
-    return
+    user = request.user
+    shoe_id = request.data.get('shoe_id')
+
+    try:
+        shoe = Shoe.objects.get(id=shoe_id)
+    except Shoe.DoesNotExist:
+        return Response({'error': 'Shoe not found'}, status=status.HTTP_404_NOT_FOUND)
+    
+    user_shoe_data = {
+        'rating': request.data.get('rating'),
+        'notes': request.data.get('notes'),
+        'size': request.data.get('size'),
+        'width': request.data.get('width'),
+        'favorite': request.data.get('favorite', False),
+        'wishlist': request.data.get('wishlist', False),
+    }
+
+    user_shoe, created = UserShoe.objects.update_or_create(
+        user=user,
+        shoe=shoe,
+        defaults=user_shoe_data
+    )
+
+    serialzier = UserShoeSerializer(user_shoe)
+    if created:
+        return Response(serialzier.data, status=status.HTTP_201_CREATED)
+    else:
+        return Response(serialzier.data, status=status.HTTP_200_OK)
 
 
+
+# Search
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def search(request):

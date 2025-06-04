@@ -93,10 +93,12 @@ const Login = (props) =>  {
 
 
     return ( 
-        <Container>
+        <Container id="login-container" className="mt-5">
+            <Row id='login-header' className="mb-4">
+                <h1>Shoe Tracker</h1>
+            </Row>
             <Row>
                 <Col>
-                    <h1>Login</h1>
                     {loginError && <div className="alert alert-danger">{loginError}</div>}
                     <Formik
                         initialValues={{
@@ -109,8 +111,9 @@ const Login = (props) =>  {
                         validateOnBlur={false}
                     >
                         {({ isSubmitting, handleSubmit, handleChange, values, touched, errors }) => (
-                            <Form onSubmit={handleSubmit}>
-                                <Form.Group>
+                            <Form onSubmit={handleSubmit} className='login-form'>
+                                <h2>Login</h2>
+                                <Form.Group className='form-group'>
                                     <Form.Label>Username</Form.Label>
                                     <Form.Control
                                         type="text"
@@ -126,7 +129,7 @@ const Login = (props) =>  {
                                         </Form.Control.Feedback>
                                     )}
                                 </Form.Group>
-                                <Form.Group>
+                                <Form.Group className='form-group'>
                                     <Form.Label>Password</Form.Label>
                                     <Form.Control
                                         type={visible ? "text" : "password"}
@@ -142,7 +145,7 @@ const Login = (props) =>  {
                                         </Form.Control.Feedback>
                                     )}
                                 </Form.Group>
-                                <Form.Group>
+                                <Form.Group className='form-group'>
                                     <Form.Check
                                         type="checkbox"
                                         label="Show password"
@@ -150,7 +153,7 @@ const Login = (props) =>  {
                                         onChange={() => setVisible(!visible)}
                                     />
                                 </Form.Group>
-                                <Button type="submit" disabled={isSubmitting}>
+                                <Button type="submit" disabled={isSubmitting} className="my-button">
                                     Login
                                 </Button>
                             </Form>
@@ -158,7 +161,6 @@ const Login = (props) =>  {
                     </Formik>
                 </Col>
                 <Col>
-                    <h1>Create new user</h1>
                     {registerError && <div className="alert alert-danger">{registerError}</div>}
                     <Formik
                         initialValues={{
@@ -172,8 +174,9 @@ const Login = (props) =>  {
                         validateOnBlur={false}
                     >
                         {({ isSubmitting, handleSubmit, handleChange, values, touched, errors }) => (
-                            <Form onSubmit={handleSubmit}>
-                                <Form.Group>
+                            <Form onSubmit={handleSubmit} className='login-form'>
+                                <h2>Create new user</h2>
+                                <Form.Group className='form-group'>
                                     <Form.Label>Username</Form.Label>
                                     <Form.Control
                                         type="text"
@@ -189,7 +192,7 @@ const Login = (props) =>  {
                                         </Form.Control.Feedback>
                                     )}
                                 </Form.Group>
-                                <Form.Group>
+                                <Form.Group className='form-group'>
                                     <Form.Label>Password</Form.Label>
                                     <Form.Control
                                         type={newVisible ? "text" : "password"}
@@ -205,7 +208,7 @@ const Login = (props) =>  {
                                         </Form.Control.Feedback>
                                     )}
                                 </Form.Group>
-                                <Form.Group>
+                                <Form.Group className='form-group'>
                                     <Form.Label>Confirm password</Form.Label>
                                     <Form.Control
                                         type={newVisible ? "text" : "password"}
@@ -221,7 +224,7 @@ const Login = (props) =>  {
                                         </Form.Control.Feedback>
                                     )}
                                 </Form.Group>
-                                <Form.Group>
+                                <Form.Group className='form-group'>
                                     <Form.Check
                                         type="checkbox"
                                         label="Show password"
@@ -229,7 +232,7 @@ const Login = (props) =>  {
                                         onChange={() => setNewVisible(!newVisible)}
                                     />
                                 </Form.Group>
-                                <Button type="submit" disabled={isSubmitting}>
+                                <Button type="submit" disabled={isSubmitting} className='my-button'>
                                     Create
                                 </Button>
                             </Form>

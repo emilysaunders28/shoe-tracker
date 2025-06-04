@@ -1,0 +1,66 @@
+/* HEADER IMAGE/TITLE */
+#home-image {
+    background-image: url('https://cdn.outsideonline.com/wp-content/uploads/2022/01/GettyImages-1191744336.jpg?crop=16:9&width=960&enable=upscale&quality=100');
+    background-size: cover;
+    background-position: center;
+    height: 100%;
+    padding-top: 56.25%;
+    position: relative;
+}
+#title {
+    font-size: 70px;
+}
+@media screen and (max-width: 991px) {
+    #title {
+        font-size: 50px;
+    }
+}
+@media screen and (max-width: 767px) {
+    #title {
+        font-size: 30px;
+    }
+}
+#welcome-text {
+    position:absolute;
+    top:10%;
+    right: 10%;
+    width: 40%;
+    color: #004e61;
+}
+
+
+
+/* WELCOME BACK SECTION */
+#welcome-back {
+    text-align: center;
+    padding: 30px;
+    border-top: 20px solid var(--color-secondary);
+    border-bottom: 20px solid var(--color-secondary);
+}
+#welcome-back h2 {
+
+}
+#welcome-back h3 {
+    color: var(--color-primary)
+}
+#welcome-back a {
+    color: var(--color-primary);
+    text-decoration: none;
+}
+#welcome-back a:hover {
+    color: var(--color-secondary);
+    text-decoration: underline;
+}
+
+
+/* POPULAR SHOES SECTION */
+
+#popular-shoes {
+    padding: 30px 0px;
+    text-align: center;
+    color: var(--color-primary);
+}
+#popular-shoes h2 {
+    margin-bottom: 20px;
+    color: var(--color-primary);
+}

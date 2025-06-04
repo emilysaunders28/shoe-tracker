@@ -1,7 +1,15 @@
+import MyNav from '../components/MyNav'
+import { Container, Row, Col } from 'react-bootstrap'
+
 const Explore = (props) => {
     return ( 
-        <h1>Explore</h1>
+        <>
+        <MyNav/>
+        <Container>
+
+        </Container>
+        </>
      );
 }
 
-export default Explore ;
+export default Explore;

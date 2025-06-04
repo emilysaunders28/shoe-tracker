@@ -1,0 +1,40 @@
+
+@import './style/homepage.css';
+@import './style/button.css';
+@import './style/navbar.css';
+@import './style/shoe-card.css';
+@import './style/carousel.css';
+@import './style/myshoes.css';
+@import './style/shoeview.css';
+@import './style/login.css';
+
+/* Global CSS Variables */
+
+:root {
+    --color-primary: #004e61;
+    --color-secondary: #ffb300;
+    --color-background: #ffffff;
+    --color-text: #000000;
+    --color-border: #e0e0e0;
+    --color-error: #d9534f;
+    --color-success: #5cb85c;
+    --color-warning: #f0ad4e;
+    --color-info: #5bc0de;
+    
+    --font-family-sans-serif: 'Helvetica Neue', Arial, sans-serif;
+    --font-family-serif: 'Georgia', serif;
+    
+    --font-size-small: 12px;
+    --font-size-medium: 16px;
+    --font-size-large: 20px;
+    
+    --spacing-small: 4px;
+    --spacing-medium: 8px;
+    --spacing-large: 16px;
+    
+    --border-radius-small: 4px;
+    --border-radius-medium: 8px;
+    --border-radius-large: 16px;
+    
+    /* Add more variables as needed */
+}

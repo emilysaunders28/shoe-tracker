@@ -16,10 +16,10 @@ export const fetchUser = async () => {
 };
 
 export const useUser = () => {
+
     return useQuery({
         queryKey: ['user'],
         queryFn: fetchUser,
         staleTime: 1000 * 60 * 5,
-        retry: false,
     });
 };
